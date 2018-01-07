@@ -1,0 +1,15 @@
+{
+	"description": "<p>LubeTube - The best Porn in life is free<p>For more information, visit <a href=\"http://www.lubetube.com\">http://www.lubetube.com</a>", 
+	"author": "Henrik Andersson, lprot", 
+	"homepage": "https://github.com/lprot/movian-plugin-lubetube", 
+	"title": "LubeTube", 
+	"synopsis": "The you tube of porn, Free Porn Movies updated daily!", 
+	"version": "0.8.2",
+	"file": "lubetube.js", 
+	"showtimeVersion": "4.8",
+	"type": "ecmascript",
+	"id": "lubetube", 
+	"icon": "lubetube.png",
+	"category": "video",
+        "apiversion": 2
+}
