@@ -133,7 +133,7 @@ function index(page, url) {
     function loader() {
         if (!tryToSearch) return false;
         page.loading = true;
-        var doc = http.request(url).toString();
+        var doc = http.request(url.match('http') ? url : BASE_URL + url).toString();
         page.loading = false;
         var mp = doc.match(/<h2>Most Popular Videos<\/h2>([\S\s]*?)<span class="seperator_rt">/);
         if (mp) {
@@ -146,10 +146,8 @@ function index(page, url) {
             });
         }
         var blob = doc.match(/<span class="seperator_rt">([\S\s]*?)<\/html>/);
-        if (blob)
-            scraper(page, blob[1])
-        else
-            return tryToSearch = false;
+        if (!blob) return tryToSearch = false;
+        scraper(page, blob[1]);
         var next = doc.match(/<a class="next" href="([\S\s]*?)">Next<\/a>/);
         if (!next) return tryToSearch = false;
         url = next[1];
