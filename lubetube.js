@@ -47,6 +47,7 @@ function setPageHeader(page, title) {
         page.metadata.title = title;
         page.metadata.logo = logo;
     }
+    page.model.contents = 'grid';    
     page.type = "directory";
     page.contents = "items";
     page.loading = false;
@@ -74,7 +75,6 @@ new page.Route(plugin.id + ":play:(.*):(.*)", function(page, url, title) {
 
 new page.Route(plugin.id + ":category:(.*):(.*)", function(page, title, url) {
     url = unescape(url);
-    setPageHeader(page, unescape(title));
     var optionsAreAdded = false, options = constructMultiopt([
         [url, 'Newest'],
         [url.replace("adddate", "rate"), 'Highest Rated'],
@@ -88,11 +88,11 @@ new page.Route(plugin.id + ":category:(.*):(.*)", function(page, title, url) {
         }
     });
     optionsAreAdded = true;
-    index(page, service.sortCategory);
+    index(page, service.sortCategory, plugin.title + ' / ' + unescape(title));
 });
 
 new page.Route(plugin.id + ":categories", function(page) {
-    setPageHeader(page, plugin.title + ' - Categories');
+    setPageHeader(page, plugin.title + ' / Categories');
     page.loading = true;
     var doc = http.request(BASE_URL + "/categories").toString();
     page.loading = false;
@@ -126,7 +126,8 @@ function scraper(page, doc) {
     }
 }
 
-function index(page, url) {
+function index(page, url, title) {
+    setPageHeader(page, title);
     page.entries = 0;
     var tryToSearch = true;
 
@@ -171,8 +172,6 @@ function constructMultiopt(multiOpt, storageVariable) {
 }
 
 new page.Route(plugin.id + ":start", function(page) {
-    setPageHeader(page, plugin.title);
-
     page.appendItem(plugin.id + ":search:", 'search', {
         title: 'Search at ' + BASE_URL
     });
@@ -193,14 +192,13 @@ new page.Route(plugin.id + ":start", function(page) {
         }
     });
     optionsAreAdded = true;
-    index(page, service.sort);
+    index(page, service.sort, plugin.title);
 });
 
 new page.Route(plugin.id + ":search:(.*)", function(page, query) {
-    setPageHeader(page, plugin.synopsis + ' / ' + query);
-    index(page, BASE_URL + "/search/videos?search_id=" + encodeURI(query));
+    index(page, BASE_URL + "/search/videos?search_id=" + encodeURI(query), plugin.title);
 });
 
 page.Searcher(plugin.id, logo, function(page, query) {
-    index(page, BASE_URL + "/search/videos?search_id=" + encodeURI(query));
+    index(page, BASE_URL + "/search/videos?search_id=" + encodeURI(query), plugin.title);
 });
